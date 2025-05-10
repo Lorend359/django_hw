@@ -1,6 +1,15 @@
 {% extends "catalog/base.html" %}
-{% block title %}Контакты{% endblock %}
 {% block content %}
-  <h1>Контактная информация</h1>
-  <p>Email: info@example.com</p>
+  <h1>Контакты</h1>
+  {% if contacts %}
+    <ul class="list-group">
+      {% for c in contacts %}
+        <li class="list-group-item">
+          <strong>{{ c.name }}:</strong> {{ c.value }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Контактная информация отсутствует.</p>
+  {% endif %}
 {% endblock %}

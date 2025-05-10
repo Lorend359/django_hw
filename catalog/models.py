@@ -37,3 +37,18 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.price}₽"
+
+
+class Contact(models.Model):
+    name        = models.CharField("Тип контакта", max_length=100)   # например, "E-mail", "Телефон"
+    value       = models.CharField("Данные", max_length=255)         # сам e-mail или номер телефона
+    created_at  = models.DateTimeField("Создано",   auto_now_add=True)
+    updated_at  = models.DateTimeField("Обновлено", auto_now=True)
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакты"
+
+    def __str__(self):
+        return f"{self.name}: {self.value}"
+
