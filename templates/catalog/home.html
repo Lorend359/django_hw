@@ -1,7 +1,6 @@
 {% extends "catalog/base.html" %}
 {% block content %}
   <h1>Добро пожаловать!</h1>
-
   <h2>Новые поступления</h2>
   {% if latest_products %}
     <div class="row">
@@ -13,7 +12,12 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">{{ product.price }} ₽</p>
+              <p class="card-text">
+                {{ product.description|default:"—"|truncatechars:100 }}
+              </p>
+              <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">
+                Подробнее
+              </a>
             </div>
           </div>
         </div>
