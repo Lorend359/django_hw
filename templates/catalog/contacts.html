@@ -1,6 +1,10 @@
 {% extends "catalog/base.html" %}
+
+{% block title %}Контакты{% endblock %}
+
 {% block content %}
   <h1>Контакты</h1>
+
   {% if contacts %}
     <ul class="list-group">
       {% for c in contacts %}
