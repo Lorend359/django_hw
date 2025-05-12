@@ -1,5 +1,25 @@
 {% extends "catalog/base.html" %}
-{% block title %}Главная{% endblock %}
 {% block content %}
-  <h1 class="display-4">Добро пожаловать в магазин!</h1>
+  <h1>Добро пожаловать!</h1>
+
+  <h2>Новые поступления</h2>
+  {% if latest_products %}
+    <div class="row">
+      {% for product in latest_products %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.price }} ₽</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Нет новых поступлений.</p>
+  {% endif %}
 {% endblock %}
