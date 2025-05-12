@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
+from django.core.mail import mail_admins
 from .models import Post
 from .forms import PostForm
 
@@ -23,6 +24,10 @@ class PostDetailView(DetailView):
         obj = super().get_object(queryset)
         obj.views += 1
         obj.save(update_fields=["views"])
+        if obj.views == 100:
+            subject = f"Статья «{obj.title}» достигла 100 просмотров"
+            message = f"Поздравляем! Ваша статья «{obj.title}» набрала 100 просмотров."
+            mail_admins(subject, message)
         return obj
 
 class PostCreateView(CreateView):
