@@ -1,12 +1,11 @@
 {% extends "catalog/base.html" %}
-
 {% block title %}Интернет-магазин{% endblock %}
 
 {% block content %}
   <h1>Добро пожаловать!</h1>
-  <h2>Новые поступления</h2>
+  <h2>Все товары</h2>
 
-  {% if page_obj %}
+  {% if page_obj.object_list %}
     <div class="row">
       {% for product in page_obj %}
         <div class="col-md-4 mb-4">
@@ -16,9 +15,7 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">
-                {{ product.description|default:"—"|truncatechars:100 }}
-              </p>
+              <p class="card-text">{{ product.description|truncatechars:100 }}</p>
               <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">
                 Подробнее
               </a>
@@ -35,9 +32,7 @@
             <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹ Назад</a>
           </li>
         {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">‹ Назад</span>
-          </li>
+          <li class="page-item disabled"><span class="page-link">‹ Назад</span></li>
         {% endif %}
 
         {% for num in page_obj.paginator.page_range %}
@@ -51,12 +46,11 @@
             <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд ›</a>
           </li>
         {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">Вперёд ›</span>
-          </li>
+          <li class="page-item disabled"><span class="page-link">Вперёд ›</span></li>
         {% endif %}
       </ul>
     </nav>
+
   {% else %}
     <p>Нет новых поступлений.</p>
   {% endif %}
