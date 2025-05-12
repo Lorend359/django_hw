@@ -1,37 +1,30 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
+
 from .models import Product, Contact
 from .forms import ProductForm
 
-def home(request):
-    products = Product.objects.order_by("-created_at")
-    paginator = Paginator(products, 5)              # 5 товаров на страницу
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-    return render(request, "catalog/home.html", {
-        "page_obj": page_obj,
-    })
+class HomeListView(ListView):
+    model = Product
+    template_name = "catalog/home.html"
+    paginate_by = 5
+    ordering = ["-created_at"]
 
-def contacts(request):
-    contacts = Contact.objects.all()
-    return render(request, "catalog/contacts.html", {
-        "contacts": contacts,
-    })
+class ContactsView(TemplateView):
+    template_name = "catalog/contacts.html"
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, "catalog/product_detail.html", {
-        "product": product,
-    })
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["contacts"] = Contact.objects.all()
+        return ctx
 
-def add_product(request):
-    if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("catalog:home")
-    else:
-        form = ProductForm()
-    return render(request, "catalog/add_product.html", {
-        "form": form,
-    })
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "catalog/product_detail.html"
+    context_object_name = "product"
+
+class AddProductView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "catalog/add_product.html"
+    success_url = reverse_lazy("catalog:home")
