@@ -1,3 +1,22 @@
-from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.core.mail import send_mail
+from .forms import SignUpForm
 
-# Create your views here.
+class SignUpView(CreateView):
+    form_class = SignUpForm
+    template_name = "users/signup.html"
+    success_url = reverse_lazy("users:login")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = form.instance
+        # отправляем приветственное письмо
+        send_mail(
+            subject="Добро пожаловать в наш магазин!",
+            message=f"Привет, {user.email}! Спасибо за регистрацию.",
+            from_email=None,  # возьмётся DEFAULT_FROM_EMAIL из настроек
+            recipient_list=[user.email],
+            fail_silently=True,
+        )
+        return response
