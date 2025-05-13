@@ -11,11 +11,10 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         user = form.instance
-        # отправляем приветственное письмо
         send_mail(
             subject="Добро пожаловать в наш магазин!",
             message=f"Привет, {user.email}! Спасибо за регистрацию.",
-            from_email=None,  # возьмётся DEFAULT_FROM_EMAIL из настроек
+            from_email=None,
             recipient_list=[user.email],
             fail_silently=True,
         )

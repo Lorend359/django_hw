@@ -162,3 +162,5 @@ LOGIN_REDIRECT_URL = "catalog:home"
 # куда перенаправлять после логаута
 LOGOUT_REDIRECT_URL = "catalog:home"
 
+# Куда редиректить анонимных пользователей
+LOGIN_URL = "users:login"
