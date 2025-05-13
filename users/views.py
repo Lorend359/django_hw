@@ -1,7 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.core.mail import send_mail
-from .forms import SignUpForm
+
+from .forms import SignUpForm, ProfileForm
+from .models import User
+
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -19,3 +23,13 @@ class SignUpView(CreateView):
             fail_silently=True,
         )
         return response
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = "users/profile.html"
+    success_url = reverse_lazy("users:profile")
+
+    def get_object(self, queryset=None):
+        return self.request.user

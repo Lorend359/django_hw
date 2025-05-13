@@ -24,17 +24,15 @@
         {% endif %}
       </ul>
 
-      {# Правый блок ссылок/форм #}
+      {# Правый блок: вход/выход/регистрация #}
       <ul class="navbar-nav mb-2 mb-lg-0">
         {% if request.user.is_authenticated %}
           <li class="nav-item">
             <form method="post" action="{% url 'users:logout' %}">
               {% csrf_token %}
-              <button
-                type="submit"
-                class="nav-link btn btn-link py-0"
-                style="display:inline-block;"
-              >
+              <button type="submit"
+                      class="nav-link btn btn-link py-0"
+                      style="display:inline-block;">
                 Выход
               </button>
             </form>

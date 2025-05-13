@@ -13,3 +13,14 @@ class SignUpForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields["password1"].widget.attrs.update({"class": "form-control"})
         self.fields["password2"].widget.attrs.update({"class": "form-control"})
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["avatar", "phone", "country"]
+        widgets = {
+            "avatar": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+            "country": forms.TextInput(attrs={"class": "form-control"}),
+        }
