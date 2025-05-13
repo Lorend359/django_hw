@@ -1,25 +1,31 @@
 {% extends "catalog/base.html" %}
-
 {% block title %}Интернет-магазин{% endblock %}
 
 {% block content %}
   <h1>Добро пожаловать!</h1>
-  <h2>Новые поступления</h2>
+  <h2>Все товары</h2>
 
-  {% if page_obj %}
+  {% if page_obj.object_list %}
     <div class="row">
       {% for product in page_obj %}
         <div class="col-md-4 mb-4">
           <div class="card h-100">
             {% if product.image %}
-              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              <img
+                src="{{ product.image.url }}"
+                class="card-img-top"
+                alt="{{ product.name }}"
+              >
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <p class="card-text">
                 {{ product.description|default:"—"|truncatechars:100 }}
               </p>
-              <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">
+              <a
+                href="{% url 'catalog:product_detail' product.pk %}"
+                class="btn btn-primary"
+              >
                 Подробнее
               </a>
             </div>
@@ -32,7 +38,9 @@
       <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹ Назад</a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+              ‹ Назад
+            </a>
           </li>
         {% else %}
           <li class="page-item disabled">
@@ -48,7 +56,9 @@
 
         {% if page_obj.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд ›</a>
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+              Вперёд ›
+            </a>
           </li>
         {% else %}
           <li class="page-item disabled">
@@ -58,6 +68,6 @@
       </ul>
     </nav>
   {% else %}
-    <p>Нет новых поступлений.</p>
+    <p>Нет доступных товаров.</p>
   {% endif %}
 {% endblock %}

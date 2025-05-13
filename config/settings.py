@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'catalog'
+    'catalog',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# config/settings.py
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# на эти адреса будут приходить уведомления mail_admins()
+ADMINS = [
+    ("Святослав", "you@example.com"),
+]
+DEFAULT_FROM_EMAIL = "webmaster@localhost"
