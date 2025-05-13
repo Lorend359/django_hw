@@ -11,4 +11,13 @@
   <p><strong>Категория:</strong> {{ product.category.name }}</p>
   <p>{{ product.description|default:"Описание отсутствует." }}</p>
   <p><small>Создано: {{ product.created_at }}, обновлено: {{ product.updated_at }}</small></p>
+
+  <p class="mt-3">
+    <a class="btn btn-secondary" href="{% url 'catalog:product_edit' product.pk %}">
+      Редактировать
+    </a>
+    <a class="btn btn-danger" href="{% url 'catalog:product_delete' product.pk %}">
+      Удалить
+    </a>
+  </p>
 {% endblock %}

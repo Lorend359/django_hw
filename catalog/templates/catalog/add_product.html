@@ -1,10 +1,19 @@
 {% extends "catalog/base.html" %}
-{% block title %}Добавить товар{% endblock %}
+{% block title %}{% if object %}Редактировать товар{% else %}Добавить товар{% endif %}{% endblock %}
 {% block content %}
-  <h1>Добавить новый товар</h1>
+  <h1>{% if object %}Редактировать товар{% else %}Добавить новый товар{% endif %}</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Сохранить</button>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div class="mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success">
+      {% if object %}Сохранить{% else %}Создать{% endif %}
+    </button>
   </form>
 {% endblock %}

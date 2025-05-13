@@ -1,6 +1,8 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
-
+from django.views.generic import (
+    ListView, DetailView, TemplateView,
+    CreateView, UpdateView, DeleteView
+)
 from .models import Product, Contact
 from .forms import ProductForm
 
@@ -12,7 +14,6 @@ class HomeListView(ListView):
 
 class ContactsView(TemplateView):
     template_name = "catalog/contacts.html"
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["contacts"] = Contact.objects.all()
@@ -27,4 +28,16 @@ class AddProductView(CreateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/add_product.html"
+    success_url = reverse_lazy("catalog:home")
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "catalog/add_product.html"
+    def get_success_url(self):
+        return reverse_lazy("catalog:product_detail", args=[self.object.pk])
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = "catalog/product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
