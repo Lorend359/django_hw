@@ -7,7 +7,7 @@ from .models import Post
 from .forms import PostForm
 
 class PostListView(ListView):
-    model = Post
+    queryset = Post.objects.filter(is_published=True)
     template_name = "blog/post_list.html"
     context_object_name = "posts"
     paginate_by = 10
