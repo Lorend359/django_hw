@@ -21,7 +21,6 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         if "image" in self.fields:
             self.fields["image"].label_suffix = ""
 
@@ -50,11 +49,17 @@ class ProductForm(forms.ModelForm):
     def clean_image(self):
         """
         Дополнительное задание: проверяем формат и размер изображения.
+        Поддерживаем как новый загруженный файл, так и уже существующий ImageFieldFile.
         """
         img = self.cleaned_data.get("image")
-        if img:
-            if not img.content_type in ("image/jpeg", "image/png"):
-                raise ValidationError("Допускаются только JPEG и PNG изображения.")
-            if img.size > 5 * 1024 * 1024:
-                raise ValidationError("Размер изображения не должен превышать 5 МБ.")
+        if img is None or not hasattr(img, "content_type"):
+            return img
+
+        content_type = img.content_type
+        size = img.size
+
+        if content_type not in ("image/jpeg", "image/png"):
+            raise ValidationError("Допускаются только JPEG и PNG изображения.")
+        if size > 5 * 1024 * 1024:
+            raise ValidationError("Размер изображения не должен превышать 5 МБ.")
         return img
