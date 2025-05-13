@@ -155,3 +155,10 @@ ADMINS = [
     ("Святослав", "you@example.com"),
 ]
 DEFAULT_FROM_EMAIL = "webmaster@localhost"
+
+# куда перенаправлять после успешного логина
+LOGIN_REDIRECT_URL = "catalog:home"
+
+# куда перенаправлять после логаута
+LOGOUT_REDIRECT_URL = "catalog:home"
+
