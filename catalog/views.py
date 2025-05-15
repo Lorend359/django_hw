@@ -17,10 +17,12 @@ class ContactsView(TemplateView):
         ctx["contacts"] = Contact.objects.all()
         return ctx
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
     context_object_name = "product"
+    login_url = 'users:login'
+    redirect_field_name = 'next'
 
 class AddProductView(LoginRequiredMixin, CreateView):
     model = Product
