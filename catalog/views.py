@@ -28,6 +28,11 @@ class HomeListView(ListView):
     paginate_by = 5
     ordering = ["-created_at"]
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(is_published=True)
+
+
 
 class ContactsView(TemplateView):
     template_name = "catalog/contacts.html"
