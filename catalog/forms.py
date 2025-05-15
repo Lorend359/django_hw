@@ -1,11 +1,20 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
 from .models import Product
 
 FORBIDDEN_WORDS = {
-    "казино", "криптовалюта", "крипта", "биржа",
-    "дешево", "бесплатно", "обман", "полиция", "радар",
+    "казино",
+    "криптовалюта",
+    "крипта",
+    "биржа",
+    "дешево",
+    "бесплатно",
+    "обман",
+    "полиция",
+    "радар",
 }
+
 
 class ProductForm(forms.ModelForm):
     class Meta:

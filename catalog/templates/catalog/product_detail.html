@@ -1,23 +1,25 @@
 {% extends "catalog/base.html" %}
-
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-  <h1>{{ product.name }}</h1>
-  {% if product.image %}
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid mb-4">
-  {% endif %}
-  <p><strong>Цена:</strong> {{ product.price }} ₽</p>
-  <p><strong>Категория:</strong> {{ product.category.name }}</p>
-  <p>{{ product.description|default:"Описание отсутствует." }}</p>
-  <p><small>Создано: {{ product.created_at }}, обновлено: {{ product.updated_at }}</small></p>
+<h1>{{ product.name }}</h1>
 
+{% if product.image %}
+  <img src="{{ product.image.url }}" class="img-fluid mb-4" alt="{{ product.name }}">
+{% endif %}
+
+<p><strong>Цена:</strong> {{ product.price }} ₽</p>
+<p><strong>Категория:</strong> {{ product.category.name }}</p>
+<p>{{ product.description|default:"Описание отсутствует." }}</p>
+<p><small>Создано: {{ product.created_at }}, обновлено: {{ product.updated_at }}</small></p>
+
+{# --------------------------------------------- #}
+{% if request.user.is_authenticated and request.user == product.owner or perms.catalog.delete_product %}
   <p class="mt-3">
-    <a class="btn btn-secondary" href="{% url 'catalog:product_edit' product.pk %}">
-      Редактировать
-    </a>
-    <a class="btn btn-danger" href="{% url 'catalog:product_delete' product.pk %}">
-      Удалить
-    </a>
+    <a class="btn btn-secondary" href="{% url 'catalog:product_edit' product.pk %}">Редактировать</a>
+    <a class="btn btn-danger" href="{% url 'catalog:product_delete' product.pk %}">Удалить</a>
   </p>
+{% endif %}
+{# --------------------------------------------- #}
+
 {% endblock %}
