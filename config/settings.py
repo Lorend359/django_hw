@@ -181,3 +181,6 @@ CACHES = {
     }
 }
 
+TEMPLATES[0]["OPTIONS"]["context_processors"] += [
+    "catalog.context_processors.categories",
+]
