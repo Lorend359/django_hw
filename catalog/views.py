@@ -1,25 +1,23 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.exceptions import PermissionDenied  # пригодится, если нужно явно «ронять» 403
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
-
+from django.views.generic import (
+    ListView, TemplateView, DetailView,
+    CreateView, UpdateView, DeleteView,
+)
+from .models import Product, Contact
 from .forms import ProductForm
-from .models import Contact, Product
 
 
 class OwnerOrModeratorRequiredMixin(UserPassesTestMixin):
-    """
-    Разрешает действие, если
-      • пользователь — владелец объекта, или
-      • пользователь входит в группу «Модератор продуктов».
-    """
-
     mod_group_name = "Модератор продуктов"
 
     def test_func(self) -> bool:
         obj = self.get_object()
         user = self.request.user
-        return user == getattr(obj, "owner", None) or user.groups.filter(name=self.mod_group_name).exists()
+        return (
+            user == getattr(obj, "owner", None)
+            or user.groups.filter(name=self.mod_group_name).exists()
+        )
 
 
 class HomeListView(ListView):
@@ -29,9 +27,7 @@ class HomeListView(ListView):
     ordering = ["-created_at"]
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(is_published=True)
-
+        return super().get_queryset().filter(is_published=True)
 
 
 class ContactsView(TemplateView):
@@ -44,8 +40,6 @@ class ContactsView(TemplateView):
 
 
 class ProductDetailView(DetailView):
-    """Просмотр карточки товара — только для авторизованных пользователей"""
-
     model = Product
     template_name = "catalog/product_detail.html"
     context_object_name = "product"
@@ -58,7 +52,7 @@ class AddProductView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("catalog:home")
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user  # фиксируем владельца
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
@@ -75,3 +69,17 @@ class ProductDeleteView(LoginRequiredMixin, OwnerOrModeratorRequiredMixin, Delet
     model = Product
     template_name = "catalog/product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
+
+
+class ProductUnpublishView(LoginRequiredMixin, OwnerOrModeratorRequiredMixin, UpdateView):
+    """Модератор или владелец может снять товар с публикации."""
+    model = Product
+    fields = []                                   # форму не показываем
+    template_name = "catalog/product_confirm_unpublish.html"
+    success_url = reverse_lazy("catalog:home")
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.is_published = False
+        obj.save(update_fields=["is_published"])
+        return super().form_valid(form)
