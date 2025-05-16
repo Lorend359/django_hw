@@ -1,8 +1,11 @@
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
-from catalog.models import Category, Product
-from django.conf import settings
 from pathlib import Path
+
+from django.conf import settings
+from django.core.management import call_command
+from django.core.management.base import BaseCommand
+
+from catalog.models import Category, Product
+
 
 class Command(BaseCommand):
     help = "Перезаливает тестовые категории и товары из fixtures/initial_data.json"

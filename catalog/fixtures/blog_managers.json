@@ -1,0 +1,14 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Контент-менеджер",
+      "permissions": [
+        ["blog", "add_post"],
+        ["blog", "change_post"],
+        ["blog", "delete_post"]
+      ]
+    }
+  }
+]

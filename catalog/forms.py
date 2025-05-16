@@ -1,22 +1,32 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
 from .models import Product
 
 FORBIDDEN_WORDS = {
-    "казино", "криптовалюта", "крипта", "биржа",
-    "дешево", "бесплатно", "обман", "полиция", "радар",
+    "казино",
+    "криптовалюта",
+    "крипта",
+    "биржа",
+    "дешево",
+    "бесплатно",
+    "обман",
+    "полиция",
+    "радар",
 }
+
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["name", "description", "image", "price", "category"]
+        fields = ["name", "description", "image", "price", "category","is_published"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
             "price": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
             "category": forms.Select(attrs={"class": "form-select"}),
             "image": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "is_published": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
     def __init__(self, *args, **kwargs):

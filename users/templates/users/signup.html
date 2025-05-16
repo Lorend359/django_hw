@@ -1,0 +1,18 @@
+{% extends "catalog/base.html" %}
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+  <h1>Регистрация</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div class="mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+  </form>
+{% endblock %}
