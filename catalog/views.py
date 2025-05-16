@@ -6,7 +6,9 @@ from django.views.generic import (
 )
 from .models import Product, Contact
 from .forms import ProductForm
-
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.conf import settings
 
 class OwnerOrModeratorRequiredMixin(UserPassesTestMixin):
     mod_group_name = "Модератор продуктов"
@@ -39,10 +41,12 @@ class ContactsView(TemplateView):
         return ctx
 
 
+@method_decorator(cache_page(settings.CACHE_TTL), name="dispatch")
 class ProductDetailView(DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
     context_object_name = "product"
+
 
 
 class AddProductView(LoginRequiredMixin, CreateView):
