@@ -164,3 +164,23 @@ LOGOUT_REDIRECT_URL = "catalog:home"
 
 # Куда редиректить анонимных пользователей
 LOGIN_URL = "users:login"
+
+
+
+# ---- Redis cache -------------------------------------------------
+CACHE_TTL = int(os.getenv("CACHE_TTL", "300"))
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "TIMEOUT": CACHE_TTL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+TEMPLATES[0]["OPTIONS"]["context_processors"] += [
+    "catalog.context_processors.categories",
+]

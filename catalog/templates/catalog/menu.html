@@ -1,38 +1,64 @@
-{# templates/catalog/menu.html #}
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
+
     <a class="navbar-brand" href="{% url 'catalog:home' %}">Shop</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMain"
+            aria-controls="navbarMain" aria-expanded="false"
+            aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      {# Левый блок ссылок #}
+    <div class="collapse navbar-collapse" id="navbarMain">
+
+      <!-- левый блок ------------------------------------------------->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
         <li class="nav-item">
           <a class="nav-link" href="{% url 'catalog:home' %}">Главная</a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" href="{% url 'catalog:contacts' %}">Контакты</a>
         </li>
+
+        <!-- выпадайка категорий -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#"
+             role="button" data-bs-toggle="dropdown">
+            Категории
+          </a>
+          <ul class="dropdown-menu">
+            {% for c in categories %}
+              <li>
+                <a class="dropdown-item"
+                   href="{% url 'catalog:category_products' c.pk %}">
+                  {{ c.name }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+
         {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'catalog:add_product' %}">Добавить</a>
+            <a class="nav-link" href="{% url 'catalog:add_product' %}">
+              Добавить
+            </a>
           </li>
         {% endif %}
       </ul>
 
-      {# Правый блок: вход/выход/регистрация #}
+      <!-- правый блок ------------------------------------------------>
       <ul class="navbar-nav mb-2 mb-lg-0">
+
         {% if request.user.is_authenticated %}
           <li class="nav-item">
             <form method="post" action="{% url 'users:logout' %}">
               {% csrf_token %}
-              <button type="submit"
-                      class="nav-link btn btn-link py-0"
-                      style="display:inline-block;">
+              <button type="submit" class="btn nav-link border-0 bg-transparent">
                 Выход
               </button>
             </form>
@@ -45,6 +71,7 @@
             <a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a>
           </li>
         {% endif %}
+
       </ul>
     </div>
   </div>
